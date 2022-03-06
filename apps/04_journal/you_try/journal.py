@@ -40,13 +40,23 @@ class Journal():
         }
 
     def save(self):
-        print("saving changes")
-        with file.open("{}{}.jrn".format(journal_dir, self.name), "w+") as f:
-            for entry in self.unsaved_entries[:2]:
-                # TODO: write in retry logic, if desriable
-                f.write(b"{},".format(entry))
-                print("Saved entry {}".format(
-                    self.unsaved_entries.index(entry, 0, -2) + 1))
-            f.write(b"{}".format(self.unsaved_entries.pop()))
-            print("saved last entry")
-            sleep(3000)
+        # def newliner(x): return "{}\n".format(x)
+        if(len(self.unsaved_entries) == 0):
+            print("No entries to save")
+        elif(len(self.unsaved_entries) == 1):
+            self.entries.append(self.unsaved_entries.pop())
+            print("saving changes")
+            with open("{}{}.jrn".format(journal_dir, self.name), "w+") as f:
+                f.write(self.saved_entries)
+            print("Entries saved: {}".format(self.entries))
+        else:
+            last_entry = self.unsaved_entries.pop()
+            print("saving changes")
+            with open("{}{}.jrn".format(journal_dir, self.name), "w+") as f:
+                while(len(self.unsaved_entries) > 0):
+                    self.entries.append(self.unsaved_entries.popleft())
+                stringified_entries = "".join(
+                    ["{}\n".format(n) for n in self.entries])
+                stringified_entries += last_entry
+                f.write(stringified_entries)
+                print("Entries saved: {}".format(stringified_entries))
