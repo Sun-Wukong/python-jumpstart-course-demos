@@ -47,16 +47,16 @@ class Journal():
             self.entries.append(self.unsaved_entries.pop())
             print("saving changes")
             with open("{}{}.jrn".format(journal_dir, self.name), "w+") as f:
-                f.write(self.saved_entries)
+                f.write(self.entries)
             print("Entries saved: {}".format(self.entries))
         else:
-            last_entry = self.unsaved_entries.pop()
+            # last_entry = self.unsaved_entries.pop()
             print("saving changes")
             with open("{}{}.jrn".format(journal_dir, self.name), "w+") as f:
                 while(len(self.unsaved_entries) > 0):
                     self.entries.append(self.unsaved_entries.popleft())
+                # self.entries.append(last_entry)
                 stringified_entries = "".join(
                     ["{}\n".format(n) for n in self.entries])
-                stringified_entries += last_entry
                 f.write(stringified_entries)
-                print("Entries saved: {}".format(stringified_entries))
+                print("Entries saved:\n{}".format(stringified_entries))
